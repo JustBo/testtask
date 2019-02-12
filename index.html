@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form id="form">
+    <div>
+        Sum:
+        <input type="text" name="sum">
+    </div>
+    <div>
+        Price:
+        <input type="text" name="price">
+    </div>
+    <button>Calculate</button>
+</form>
+<script>
+    let form = document.getElementById('form');
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        let data = new FormData(form);
+        console.log(data.get('sum'));
+    })
+</script>
+
+<div>
+    <button id="openModal">Open Modal Window</button>
+</div>
+<script>
+    document.getElementById('openModal').addEventListener('click', function () {
+        let modal = new Modal('testModal');
+    });
+    function Modal(name) {
+        this.name = name;
+        this.render = function() {
+            let modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.setAttribute('data-name', this.name);
+            document.getElementsByTagName('body')[0].appendChild(modal);
+            console.log(this);
+        };
+        this.render();
+    }
+</script>
+
+<form id="table-form">
+    <div>
+        First Name:
+        <input type="text" name="firstname">
+    </div>
+    <div>
+        Last Name:
+        <input type="text" name="lastname">
+    </div>
+    <div>
+        Email:
+        <input type="email" name="lastname">
+    </div>
+</form>
+<table id="contacts">
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>E-mail</th>
+        <th>Date</th>
+    </tr>
+</table>
+<script>
+    let tableForm = document.getElementById('table-form');
+    tableForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+    })
+</script>
+</body>
+</html>
