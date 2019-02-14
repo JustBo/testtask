@@ -39,12 +39,16 @@
 
 .close-btn {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 5px;
+    color: gray;
+    top: 5px;
+    cursor: pointer;
 }
 
 .input-error {
+    text-align: center;
     color: red;
+    font-size: 14px;
 }
 
 @keyframes slide-up {
@@ -81,4 +85,58 @@
 .container table th,
 .container table td {
     padding: 5px;
+}
+
+.input-container {
+    display: flex;
+    align-items: flex-end;
+    padding: 10px;
+}
+
+.input-container label {
+    flex: 1 1;
+    text-align: left;
+    min-width: 40px;
+}
+
+.input-container input {
+    flex: 4 1;
+    color: #222;
+    border: none;
+    border-bottom: 1px solid #c2c2c2;
+    outline: none;
+}
+
+button {
+    margin: 0 auto;
+    display: block;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+button:hover {
+    background-color: #cccccc;
+}
+
+.buttons-container {
+    display: inline-flex;
+}
+
+.buttons-container button {
+    margin-left: 15px;
+}
+
+#form {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.calculate-result {
+    text-align: center;
+}
+
+h1, h2 {
+    text-align: center;
 }

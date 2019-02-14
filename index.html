@@ -2,34 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Indeema</title>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
+<h1>Indeema test</h1>
+<h2>Task 1</h2>
 <form id="form">
-    <div>
-        Sum:
-        <input type="text" name="sum">
+    <div class="input-container">
+        <label>Сума:</label>
+        <input
+                type="number"
+                name="sum"
+                placeholder="00.00"
+                min="0"
+                step="0.01"
+        >
     </div>
-    <div>
-        Price:
-        <input type="text" name="price">
+    <div class="input-container">
+        <label>Ціна:</label>
+        <input
+                type="number"
+                name="price"
+                placeholder="00.00"
+                min="0"
+                step="0.01"
+        >
     </div>
-    <button>Calculate</button>
+    <button>Повернути решту</button>
 </form>
-<script>
-    let form = document.getElementById('form');
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        let data = new FormData(form);
-        console.log(data.get('sum'));
-    })
-</script>
-
 <hr>
-
+<h2>Task 2</h2>
+<button id="open-modal">Open Modal Window</button>
+<hr>
+<h2>Task 3</h2>
 <div class="container" id="root"></div>
 
-<script src="main.js"></script>
+<script src="utils.js"></script>
+<script src="modal.js"></script>
+<script src="contacts.js"></script>
+<script src="calculate.js"></script>
+<script src="openModal.js"></script>
 </body>
 </html>

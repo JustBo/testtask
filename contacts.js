@@ -1,38 +1,13 @@
 (function () {
     let rootElement = document.getElementById('root');
 
-    renderApp();
-
-    function createElement(el, props) {
-        let children = Array.prototype.slice.call(arguments, 2);
-        let element = document.createElement(el);
-        for (let name in props) {
-            if (typeof props[name] === "function") {
-                element.addEventListener(name, props[name]);
-            } else {
-                element.setAttribute(name, props[name]);
-            }
-        }
-        for (let key in children) {
-            let child = children[key];
-            if (Array.isArray(child)) {
-                for (let node in child) {
-                    element.appendChild(child[node]);
-                }
-            } else if (typeof(child) === 'object') {
-                element.appendChild(child);
-            } else {
-                element.innerHTML += child;
-            }
-        }
-        return element;
-    }
-
     function renderApp() {
         rootElement.innerHTML = '';
         let app = new App();
         return rootElement.appendChild(app.render());
     }
+
+    renderApp(App);
 
     function App() {
         this.getContacts = function () {
@@ -43,16 +18,30 @@
             this.contacts = this.getContacts();
 
             let contactList = new ContactList(this.contacts);
-            let contactAdd = new ContactAdd();
-            let contactRemove = new ContactRemove(this.contacts);
+            let contactButtons = new ContactButtons(this.contacts);
             return createElement(
                 'div',
                 null,
                 contactList.render(),
+                contactButtons.render()
+            );
+        };
+    }
+
+    function ContactButtons(contacts) {
+        this.contacts = contacts;
+        this.render = function () {
+            let contactAdd = new ContactAdd();
+            let contactRemove = new ContactRemove(this.contacts);
+            return createElement(
+                'div',
+                {
+                    class: 'buttons-container'
+                },
                 contactAdd.render(),
                 contactRemove.render()
             );
-        };
+        }
     }
 
     function ContactRemove(contacts) {
@@ -93,7 +82,7 @@
     function ContactAdd() {
 
         this.handleClick = function () {
-            let modal = new Modal('testModal');
+            let modal = new Modal('contactForm');
             let form = new ContactForm(modal);
 
             modal.setChildren(form);
@@ -102,71 +91,13 @@
 
         this.render = function () {
             return createElement(
-                'div',
-                null,
-                createElement(
-                    'button',
-                    {
-                        click: this.handleClick
-                    },
-                    'Add'
-                )
-            );
-        };
-    }
-
-    function Modal(name) {
-        this.name = name;
-        this.children = document.createElement('div');
-        this.setChildren = function (nodes) {
-            this.children = nodes;
-        };
-        this.getChildren = function () {
-            return this.children;
-        };
-        this.close = function () {
-            let modal = document.getElementsByClassName(this.name).item(0);
-            modal.classList.remove('animate-open');
-            modal.classList.add('animate-close');
-            setTimeout(function () {
-                document.getElementsByClassName('backdrop').item(0).remove();
-                modal.remove();
-            }, 300);
-        };
-        this.open = function () {
-            let that = this;
-            let backdrop = createElement(
-                'div',
+                'button',
                 {
-                    class: 'backdrop',
-                    click: function () {
-                        that.close();
-                    }
-                }
-            );
-
-            let modal = createElement(
-                'div',
-                {
-                    class: 'modal ' + this.name + ' ' + 'animate-open',
-                    'data-name': this.name
+                    click: this.handleClick
                 },
-                createElement(
-                    'div',
-                    {
-                        class: 'close-btn',
-                        click: function () {
-                            that.close();
-                        }
-                    },
-                    'x'
-                ),
-                this.getChildren()
+                'Add'
             );
-
-            document.getElementsByTagName('body').item(0).appendChild(backdrop);
-            document.getElementsByTagName('body').item(0).appendChild(modal);
-        }
+        };
     }
 
     function ContactForm(modal, id = null) {
@@ -252,8 +183,7 @@
             }
             return errors;
         };
-        this.handleSubmit = function (e) {
-            e.preventDefault();
+        this.handleSubmit = function () {
             let data = new FormData(this.getForm());
             let inputs = this.inputs;
             //validate
@@ -290,17 +220,23 @@
                         'div',
                         null,
                         createElement(
-                            'label',
-                            null,
-                            inputs[name].displayName
-                        ),
-                        createElement(
-                            'input',
+                            'div',
                             {
-                                type: inputs[name].type,
-                                name: name,
-                                value: inputs[name].value
-                            }
+                                class: 'input-container'
+                            },
+                            createElement(
+                                'label',
+                                null,
+                                inputs[name].displayName
+                            ),
+                            createElement(
+                                'input',
+                                {
+                                    type: inputs[name].type,
+                                    name: name,
+                                    value: inputs[name].value
+                                }
+                            )
                         ),
                         createElement(
                             'div',
@@ -316,7 +252,8 @@
                 {
                     id: 'contact-form',
                     submit: function (e) {
-                        that.handleSubmit(e);
+                        e.preventDefault();
+                        that.handleSubmit();
                     }
                 },
                 fields,
@@ -391,7 +328,8 @@
                         {
                             type: 'checkbox',
                             class: 'check-contact',
-                            click: function () {
+                            click: function (e) {
+                                e.stopPropagation();
                                 let selectAll = document.getElementById('select-checkbox');
                                 selectAll.checked = false;
                             }
